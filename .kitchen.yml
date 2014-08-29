@@ -1,0 +1,27 @@
+---
+driver:
+  name: vagrant
+  network:
+    - ["public_network", {mac: "000c294c35c3", bridge: "en0: Ethernet"}]
+  vm_hostname: "xubuntu-vm.csd.uwo.ca"
+
+provisioner:
+  name: chef_solo
+  solo_rb:
+    ssl_verify_mode: verify_peer
+
+platforms:
+  - name: ubuntu-14.04
+
+suites:
+  - name: default
+    run_list: ["recipe[autofs::nis]"]
+    attributes:
+      nis:
+        domain: 'gaul.csd.uwo.ca'
+        servers:
+          - hostname: 'dogmatix.gaul.csd.uwo.ca'
+            ip: '129.100.20.224'
+      autofs:
+        timeout: 300
+        browse_mode: false
